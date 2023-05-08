@@ -10,9 +10,9 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const db = mysql.createConnection(
+const connection = mysql.createConnection(
   {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: '',
     database: 'employees_db',
@@ -20,9 +20,23 @@ const db = mysql.createConnection(
   console.log(`Connected to the employees_db database.`)
 );
 
-// db.query('SELECT * FROM students', function (err, results) {
-//   console.log(results);
-// });
+inquirer
+  .prompt([
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Enter a name',
+    },
+  ])
+  .then((answers) => {
+    const name = mysql.escape(answers.name.trim());
+    const sq1 = `INSERT INTO employee_names (name) VALUES ('${answers.name}')`;
+
+    connection.query(sq1, (err, result) => {
+      if (err) throw err;
+      console.log('1 row inserted');
+    });
+  });
 
 app.use((req, res) => {
   res.status(404).end();
