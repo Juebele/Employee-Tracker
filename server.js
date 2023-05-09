@@ -28,9 +28,18 @@ inquirer
       message: 'Enter a name',
     },
   ])
+  // .prompt([
+  //   {
+  //     type: 'list',
+  //     name: 'department',
+  //     message: 'select a department',
+  //   },
+  // ])
   .then((answers) => {
-    const name = mysql.escape(answers.name.trim());
+    const name = answers.name;
     const sq1 = `INSERT INTO employee_names (name) VALUES ('${answers.name}')`;
+
+    // console.log(department);
 
     connection.query(sq1, (err, result) => {
       if (err) throw err;
