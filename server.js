@@ -35,15 +35,29 @@ function homeScreen () {inquirer.prompt([
     type: 'list',
     name: 'function',
     message: 'select an action',
-    choices: ['Add Employee', 'default']
+    choices: ['Add Department', 'Add Role', 'Add Employee', 'View Departments', 'View Roles', 'View Employees']
   }
 ])
 
 
 .then((answers) => {
   switch(answers.function) {
+    case 'Add Department':
+      addDepartment();
+      return;
+    case 'Add Role':
+      addRole();
+      return;
     case 'Add Employee':
       addEmployee();
+      return;
+    case 'View Departments':
+      viewDepartments();
+      return;
+    case 'View Roles':
+      viewRoles();
+      return;
+    case 'View Employees':
       return;
   default:
     break;
@@ -51,6 +65,57 @@ function homeScreen () {inquirer.prompt([
 })
 }
 
+const addDepartment = () => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'department',
+      message: 'Enter a department name',
+    },
+  ])
+
+  .then((answers) => {
+    const department = answers.department;
+    const sq1 = `INSERT INTO department (name) VALUES ('${answers.department}')`;
+    
+    connection.query(sq1, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+    });
+  })
+}
+
+const addRole = () => {
+  return inquirer.prompt([
+    {
+      type: 'input',
+      name: 'title',
+      message: 'Enter a job title',
+    },
+    {
+      type: 'input',
+      name: 'salary',
+      message: 'Enter the salary',
+    },
+    {
+      type: 'input',
+      name: 'departmentID',
+      message: 'Enter a department ID',
+    },
+  ])
+
+  .then((answers) => {
+    const title = answers.title;
+    const salary = answers.salary;
+    const departmentID = answers.departmentID;
+    const sq1 = `INSERT INTO role (title, salary, department_id) VALUES ('${answers.title}', '${answers.salary}', ${answers.departmentID})`;
+    
+    connection.query(sq1, (err, result) => {
+      if (err) throw err;
+      console.log(result);
+    });
+  })
+}
 const addEmployee = () => {
   return inquirer.prompt([
     {
